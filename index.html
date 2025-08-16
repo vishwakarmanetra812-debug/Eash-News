@@ -1,0 +1,347 @@
+<!doctype html>
+
+<html lang="hi">
+  <head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Eash News – Fast, Responsive News Website</title>
+	<meta name="description" content="Eash News: lightweight responsive news website template with search, categories, dark mode, and article view in a single HTML file." />
+	<meta name="theme-color" content="#0f172a" />
+<style>
+    :root{
+      --bg: #0b1220;          /* dark base */
+      --card: #0f172a;        /* dark card */
+      --text: #e5e7eb;        /* light text */
+      --muted: #9ca3af;       /* muted text */
+      --brand: #60a5fa;       /* accent */
+      --brand-2:#22d3ee;      /* second accent */
+      --ring: rgba(96,165,250,.5);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 1.25rem;
+    }
+    @media (prefers-color-scheme: light){
+      :root{ --bg:#f8fafc; --card:#ffffff; --text:#0b1220; --muted:#475569; --shadow: 0 8px 24px rgba(2,6,23,.08); }
+    }
+    [data-theme="light"]{ --bg:#f8fafc; --card:#ffffff; --text:#0b1220; --muted:#475569; --shadow: 0 8px 24px rgba(2,6,23,.08); }*{ box-sizing: border-box; }
+html,body{ height:100%; }
+body{
+  margin:0; font: 16px/1.6 ui-sans-serif, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+  color:var(--text); background: radial-gradient(1200px 600px at 10% -10%, rgba(34,211,238,.08), transparent),
+                       radial-gradient(1200px 600px at 90% -10%, rgba(96,165,250,.08), transparent), var(--bg);
+  min-height:100%;
+}
+a{ color:inherit; text-decoration:none; }
+
+/* Header */
+.wrap{ max-width:1200px; margin:0 auto; padding: 16px; }
+header{
+  position: sticky; top:0; z-index:50; backdrop-filter: blur(10px);
+  background: linear-gradient(to bottom, rgba(15,23,42,.75), rgba(15,23,42,.35), transparent);
+}
+.navbar{ display:flex; align-items:center; gap:12px; justify-content:space-between; padding: 10px 0; }
+.brand{ display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.3px; }
+.logo{ width:36px; height:36px; border-radius:12px; background:
+  conic-gradient(from 180deg, var(--brand), var(--brand-2), var(--brand)); box-shadow: inset 0 0 0 2px rgba(255,255,255,.1);
+}
+.brand span{ font-size: 1.2rem; }
+.controls{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.search{ position:relative; flex:1 1 260px; }
+.search input{
+  width:100%; padding: 12px 14px 12px 40px; border-radius: 999px; border:1px solid rgba(148,163,184,.25);
+  background: var(--card); color:var(--text); outline:none;
+  box-shadow: var(--shadow);
+}
+.search svg{ position:absolute; left:12px; top:50%; transform:translateY(-50%); opacity:.7 }
+.btn{ padding:10px 14px; border-radius:999px; border:1px solid rgba(148,163,184,.25);
+  background: linear-gradient(180deg, rgba(148,163,184,.08), rgba(148,163,184,.02));
+  color:var(--text); cursor:pointer; transition:.2s transform ease;
+}
+.btn:hover{ transform: translateY(-1px); }
+
+/* Category pills */
+.cats{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.pill{ padding:8px 12px; border-radius:999px; border:1px solid rgba(148,163,184,.25); cursor:pointer; font-weight:600; }
+.pill.active{ border-color: transparent; background: linear-gradient(90deg, var(--brand), var(--brand-2)); color:#0b1220; }
+
+/* Grid */
+main{ padding: 18px 0 50px; }
+.grid{ display:grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
+.card{
+  grid-column: span 12;
+  background: var(--card); border:1px solid rgba(148,163,184,.25); border-radius: var(--radius); overflow:hidden; box-shadow: var(--shadow);
+  display:flex; flex-direction:column; min-height: 100%;
+}
+@media (min-width: 640px){ .card{ grid-column: span 6; } }
+@media (min-width: 1024px){ .card{ grid-column: span 4; } }
+.thumb{ aspect-ratio: 16/9; width:100%; background: linear-gradient(135deg, rgba(96,165,250,.25), rgba(34,211,238,.2)); display:block; }
+.content{ padding:14px 16px 16px; display:flex; flex-direction:column; gap:10px; }
+.meta{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; color:var(--muted); font-size:.85rem; }
+.title{ font-weight:800; font-size:1.05rem; line-height:1.3; }
+.excerpt{ color: var(--muted); }
+.actions{ margin-top:auto; display:flex; justify-content:space-between; align-items:center; }
+
+/* Article page */
+.article{ display:none; max-width: 900px; margin: 0 auto; background: var(--card); border:1px solid rgba(148,163,184,.25); border-radius: var(--radius); box-shadow: var(--shadow); overflow:hidden; }
+.article .hero{ width:100%; aspect-ratio: 16/9; background: linear-gradient(135deg, rgba(96,165,250,.3), rgba(34,211,238,.25)); }
+.article .body{ padding: 18px; }
+.article h1{ margin: 0 0 10px; font-size: clamp(1.4rem, 3vw, 2rem); }
+.article .by{ color:var(--muted); font-size:.9rem; margin-bottom: 14px; }
+.article .back{ margin: 12px 16px; }
+.article .body p{ margin: 0 0 14px; }
+
+footer{ padding: 30px 0; color: var(--muted); text-align:center; }
+
+/* Utility */
+.sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
+
+</style>
+  </head>
+  <body>
+	<header>
+	  <div class="wrap">
+		<div class="navbar">
+		  <a class="brand" href="#" id="homeBtn" aria-label="Eash News Home">
+			<div class="logo" aria-hidden="true"></div>
+			<span>Eash <span style="opacity:.8;font-weight:700">News</span></span>
+		  </a>
+		  <div class="controls">
+			<div class="search" role="search">
+			  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+			  <input id="q" type="search" placeholder="Search news… (e.g. cricket, tech)" autocomplete="off" />
+			</div>
+			<select id="sort" class="btn" aria-label="Sort articles">
+			  <option value="new">Newest</option>
+			  <option value="old">Oldest</option>
+			  <option value="az">A → Z</option>
+			</select>
+			<button id="theme" class="btn" aria-label="Toggle theme">🌙</button>
+		  </div>
+		</div>
+		<nav class="cats" aria-label="Categories">
+		  <button class="pill active" data-cat="all">All</button>
+		  <button class="pill" data-cat="india">India</button>
+		  <button class="pill" data-cat="world">World</button>
+		  <button class="pill" data-cat="tech">Tech</button>
+		  <button class="pill" data-cat="sports">Sports</button>
+		  <button class="pill" data-cat="ent">Entertainment</button>
+		  <button class="pill" data-cat="biz">Business</button>
+		  <button class="pill" data-cat="gaming">Gaming</button>
+		</nav>
+	  </div>
+	</header>  <div class="wrap">
+	  <main id="listView">
+		<div class="grid" id="grid" aria-live="polite"></div>
+	  </main><section id="articleView" class="article" aria-live="polite">
+		<img class="hero" id="articleHero" alt="" />
+		<div class="by back"><button class="btn" id="backBtn">← Back to news</button></div>
+		<div class="body">
+		  <h1 id="articleTitle"></h1>
+		  <div class="by" id="articleMeta"></div>
+		  <div id="articleBody"></div>
+		</div>
+	  </section>
+
+	</div>  <footer>
+	  <div class="wrap">© <span id="year"></span> Eash News • Built with vanilla HTML/CSS/JS</div>
+</footer>  <!-- Demo data (replace with your API or CMS later) -->  <script>
+    const demoArticles = [
+      {
+        id: 'a1',
+        title: 'Monsoon updates: Heavy rain in Mumbai, IMD issues orange alert',
+        excerpt: 'Local trains face delays; civic body advises residents to avoid seafronts due to high tide.',
+        body: `Mumbai mein bhari baarish ke kaaran Western aur Central line par local services prabhavit hui. IMD ne agle 24 ghanton ke liye orange alert jaari kiya hai. Nagar Nigam ne nichi ilaakon mein waterlogging se nipatne ke liye extra pumps tainaat kiye. Yatris ko anavashyak yatra se bachne ki salaah di gayi hai.`,
+        category: 'india',
+        author: 'Eash Desk',
+        date: '2025-08-15T09:00:00+05:30',
+        image: 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675"><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#60a5fa"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs><rect width="1200" height="675" fill="#0f172a"/><circle cx="240" cy="180" r="160" fill="url(#g)" opacity="0.6"/><text x="80" y="600" font-family="Segoe UI,Arial" font-size="72" fill="#fff" opacity=".9">India • Monsoon</text></svg>`)
+      },
+      {
+        id: 'a2',
+        title: 'India wins series 3–1 in thrilling cricket finale',
+        excerpt: 'Pace attack shines in death overs; Player of the Series bags 12 wickets.',
+        body: `Bharat ne antim ODI mein romanchak jeet haasil karke series 3–1 se apne naam ki. Death overs mein bowlers ne shandar comeback dikhaya. Agla daura Asia Cup se pehle scheduled hai.`,
+        category: 'sports',
+        author: 'Sports Desk',
+        date: '2025-08-12T18:30:00+05:30',
+        image: 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675"><rect width="1200" height="675" fill="#0f172a"/><rect x="100" y="120" width="1000" height="435" fill="#22d3ee" opacity=".15"/><text x="120" y="210" font-family="Segoe UI,Arial" font-size="72" fill="#fff" opacity=".9">Sports • Cricket</text></svg>`)
+      },
+      {
+        id: 'a3',
+        title: 'New budget phones bring flagship-level gaming',
+        excerpt: 'Dimensity 8300 and 8s Gen 4 chips arrive in 25–35K segment with 144 Hz displays.',
+        body: `Kai brands ne naye smartphones launch kiye hain jo gaming performance par focus karte hain. 144 Hz AMOLED, badi battery aur liquid cooling jaise features midrange segment mein aa rahe hain.`,
+        category: 'tech',
+        author: 'Tech Desk',
+        date: '2025-08-10T11:00:00+05:30',
+        image: 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675"><rect width="1200" height="675" fill="#0b1220"/><circle cx="900" cy="340" r="220" fill="#60a5fa" opacity=".25"/><text x="120" y="200" font-family="Segoe UI,Arial" font-size="68" fill="#fff" opacity=".9">Tech • Phones</text></svg>`)
+      },
+      {
+        id: 'a4',
+        title: 'Global markets mixed as oil eases',
+        excerpt: 'Investors eye inflation prints; IT and banking stocks see mild gains.',
+        body: `Vishva bazaaron mein halka sa utar-chadhav dekhne ko mila jab crude oil ke daam neeche aaye. Domestic indices mein IT aur banking mein halke labh dekhe gaye.`,
+        category: 'biz',
+        author: 'Business Desk',
+        date: '2025-08-14T09:30:00+05:30',
+        image: 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675"><rect width="1200" height="675" fill="#0f172a"/><path d="M50 600 L350 420 L600 520 L900 260 L1150 320" fill="none" stroke="#22d3ee" stroke-width="16" stroke-linecap="round"/><text x="80" y="120" font-family="Segoe UI,Arial" font-size="64" fill="#fff" opacity=".9">Business • Markets</text></svg>`)
+      },
+      {
+        id: 'a5',
+        title: 'Indie game devs launch retro-style platformer',
+        excerpt: 'Pixel-art visuals and chiptune soundtrack win hearts on day one.',
+        body: `Ek chhoti team ne retro platformer release kiya jo pehle hi din community mein chha gaya. Game ke level design aur OST ki khaasi tareef ho rahi hai.`,
+        category: 'gaming',
+        author: 'Gaming Desk',
+        date: '2025-08-09T15:10:00+05:30',
+        image: 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675"><rect width="1200" height="675" fill="#0b1220"/><rect x="200" y="220" width="800" height="240" fill="#60a5fa" opacity=".2"/><text x="230" y="320" font-family="Segoe UI,Arial" font-size="64" fill="#fff" opacity=".9">Gaming • Indie</text></svg>`)
+      },
+      {
+        id: 'a6',
+        title: 'Oscars shortlist announced; two Indian entries make cut',
+        excerpt: 'Critics applaud strong storytelling; final nominations next month.',
+        body: `Is saal ke Oscars shortlist mein do Bharatiya entries shamil hui hain. Filmon ke kahani ke liye critics ne kaafi tarif ki. Antim nominations agle mahine aa sakti hain.`,
+        category: 'ent',
+        author: 'Entertainment Desk',
+        date: '2025-08-11T21:00:00+05:30',
+        image: 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675"><rect width="1200" height="675" fill="#0f172a"/><polygon points="200,550 600,120 1000,550" fill="#22d3ee" opacity=".2"/><text x="220" y="220" font-family="Segoe UI,Arial" font-size="64" fill="#fff" opacity=".9">Entertainment</text></svg>`)
+      },
+      {
+        id: 'a7',
+        title: 'G20 ministers meet to discuss climate financing',
+        excerpt: 'Focus on green tech investment and resilience for developing nations.',
+        body: `G20 mantriyon ki baithak mein climate finance par zor diya gaya. Vikas-sheel deshon ke liye green tech aur resilience projects mein nivesh badhane par charcha hui.`,
+        category: 'world',
+        author: 'World Desk',
+        date: '2025-08-13T13:40:00+05:30',
+        image: 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675"><rect width="1200" height="675" fill="#0b1220"/><circle cx="600" cy="340" r="220" fill="#22d3ee" opacity=".2"/><text x="420" y="580" font-family="Segoe UI,Arial" font-size="64" fill="#fff" opacity=".9">World</text></svg>`)
+      }
+    ];
+</script>  <script>
+    const grid = document.getElementById('grid');
+    const listView = document.getElementById('listView');
+    const articleView = document.getElementById('articleView');
+    const articleTitle = document.getElementById('articleTitle');
+    const articleMeta = document.getElementById('articleMeta');
+    const articleBody = document.getElementById('articleBody');
+    const articleHero = document.getElementById('articleHero');
+    const backBtn = document.getElementById('backBtn');
+    const pills = Array.from(document.querySelectorAll('.pill'));
+    const q = document.getElementById('q');
+    const sort = document.getElementById('sort');
+    const themeBtn = document.getElementById('theme');
+    const homeBtn = document.getElementById('homeBtn');
+
+    const state = { cat: 'all', q: '', sort: 'new' };
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    function fmtDate(iso){
+      const d = new Date(iso);
+      return d.toLocaleString(undefined, { dateStyle:'medium', timeStyle:'short' });
+    }
+
+    function renderList(){
+      listView.style.display = '';
+      articleView.style.display = 'none';
+      grid.innerHTML = '';
+
+      let items = demoArticles.slice();
+
+      // filter by category
+      if(state.cat !== 'all') items = items.filter(a => a.category === state.cat);
+      // search
+      if(state.q){
+        const needle = state.q.toLowerCase();
+        items = items.filter(a => (a.title+a.excerpt+a.body).toLowerCase().includes(needle));
+      }
+      // sort
+      if(state.sort === 'new') items.sort((a,b)=> new Date(b.date) - new Date(a.date));
+      if(state.sort === 'old') items.sort((a,b)=> new Date(a.date) - new Date(b.date));
+      if(state.sort === 'az') items.sort((a,b)=> a.title.localeCompare(b.title));
+
+      if(!items.length){
+        grid.innerHTML = `<div style="grid-column: span 12; text-align:center; color:var(--muted); padding:30px;">No articles found. Try a different search or category.</div>`;
+        return;
+      }
+
+      for(const a of items){
+        const el = document.createElement('article');
+        el.className = 'card';
+        el.innerHTML = `
+          <img class="thumb" src="${a.image}" alt="" loading="lazy" />
+          <div class="content">
+            <div class="meta"> <span style="opacity:.8">${a.category.toUpperCase()}</span> • <time datetime="${a.date}">${fmtDate(a.date)}</time> </div>
+            <a href="#" class="title" data-id="${a.id}">${a.title}</a>
+            <p class="excerpt">${a.excerpt}</p>
+            <div class="actions">
+              <button class="btn read" data-id="${a.id}">Read</button>
+              <span class="meta">by ${a.author}</span>
+            </div>
+          </div>`;
+        grid.appendChild(el);
+      }
+    }
+
+    function renderArticle(id){
+      const a = demoArticles.find(x=>x.id===id);
+      if(!a) return;
+      listView.style.display = 'none';
+      articleView.style.display = 'block';
+      articleTitle.textContent = a.title;
+      articleMeta.textContent = `${a.category.toUpperCase()} • ${fmtDate(a.date)} • by ${a.author}`;
+      articleBody.innerHTML = a.body
+        .split(/\n\n+/)
+        .map(p => `<p>${p}</p>`) // simple paragraph split
+        .join('');
+      articleHero.src = a.image;
+      history.pushState({ view:'article', id }, '', `#article-${id}`);
+      window.scrollTo({ top:0, behavior:'smooth' });
+    }
+
+    // Delegated events
+    grid.addEventListener('click', (e)=>{
+      const t = e.target.closest('[data-id]');
+      if(t){ e.preventDefault(); renderArticle(t.dataset.id); }
+    });
+    backBtn.addEventListener('click', ()=>{ history.pushState({ view:'list' }, '', '#'); renderList(); window.scrollTo({ top:0, behavior:'smooth' }); });
+
+    // Category pills
+    pills.forEach(p=> p.addEventListener('click', ()=>{
+      pills.forEach(x=>x.classList.remove('active'));
+      p.classList.add('active');
+      state.cat = p.dataset.cat; renderList();
+    }));
+
+    // Search (debounced)
+    let timer; q.addEventListener('input', ()=>{
+      clearTimeout(timer);
+      timer = setTimeout(()=>{ state.q = q.value.trim(); renderList(); }, 200);
+    });
+
+    sort.addEventListener('change', ()=>{ state.sort = sort.value; renderList(); });
+
+    // Theme toggle
+    function currentTheme(){ return document.documentElement.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); }
+    function toggleTheme(){ const t = currentTheme()==='dark'?'light':'dark'; document.documentElement.setAttribute('data-theme', t); themeBtn.textContent = t==='dark'?'🌙':'☀️'; }
+    themeBtn.addEventListener('click', toggleTheme);
+
+    // Clicking brand goes home
+    homeBtn.addEventListener('click', (e)=>{ e.preventDefault(); history.pushState({ view:'list' }, '', '#'); renderList(); });
+
+    // Router (hash based tiny)
+    window.addEventListener('popstate', (e)=>{
+      if(e.state?.view === 'article'){ renderArticle(e.state.id); }
+      else { renderList(); }
+    });
+
+    // Initial render
+    renderList();
+
+    // Deep link support
+    if(location.hash.startsWith('#article-')){
+      const id = location.hash.replace('#article-','');
+      const exists = demoArticles.some(a=>a.id===id);
+      if(exists){ renderArticle(id); }
+    }
+</script></body>
+</html>
