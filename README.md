@@ -3,8 +3,6 @@ It contains the basic structure for a responsive news portal, including:
 
 Home page layout
 
-Styling with CSS
-
 Placeholder sections for headlines and articles
 
 
